@@ -12,7 +12,7 @@
 var canvas;
 var gl;
 
-var numPositions  = 119;
+var numPositions  = 85;
 
 var positions = [];
 var colors = [];
@@ -63,102 +63,76 @@ var vertexColors = [
     vec4(0.0, 1.0, 1.0, 1.0),
     vec4(0.0, 1.0, 1.0, 1.0),
 
-    vec4(0.0, 0.0, 1.0, 1.0), 
-    vec4(0.0, 0.0, 1.0, 1.0), 
-    vec4(0.0, 0.0, 1.0, 1.0), 
-    vec4(0.0, 0.0, 1.0, 1.0),  
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0)
 ];
 
-var verticesI = [
+var verticesH = [
 
-    vec3(-0.5, -0.5, 0.5),
-    vec3(-0.5, -0.25, 0.5),
-    vec3(0.5, -0.25, 0.5),
-    vec3(0.5, -0.5, 0.5),
-    vec3(-0.5, -0.5, -0.5),
-    vec3(-0.5, -0.25, -0.5),
-    vec3(0.5, -0.25, -0.5),
-    vec3(0.5, -0.5, -0.5),
+    vec3(-0.5, 0.5, 0.5), //0
+    vec3(-0.25, 0.5, 0.5),  //1
+    vec3(-0.25, -0.5, 0.5), //2
+    vec3(-0.5, -0.5, 0.5), //3
+    vec3(-0.5, 0.5, -0.5), //4
+    vec3(-0.25, 0.5, -0.5), //5
+    vec3(-0.25, -0.5, -0.5), //6
+    vec3(-0.5, -0.5, -0.5), //7
 
-    vec3(-0.2, -0.25, 0.5),
-    vec3(-0.2, 0.5, 0.5),
-    vec3(0.2, 0.5, 0.5),
-    vec3(0.2, -0.25, 0.5),
-    vec3(-0.2, -0.25, -0.5),
-    vec3(-0.2, 0.5, -0.5),
-    vec3(0.2, 0.5, -0.5),
-    vec3(0.2, -0.25, -0.5),
+    vec3(0.25, 0.5, 0.5), //8
+    vec3(0.5, 0.5, 0.5), //9
+    vec3(0.5, -0.5, 0.5), //10
+    vec3(0.25, -0.5, 0.5), //11
+    vec3(0.25, 0.5, -0.5), //12
+    vec3(0.5, 0.5, -0.5), //13
+    vec3(0.5, -0.5, -0.5), //14
+    vec3(0.25, -0.5, -0.5), //15
 
-    vec3(-0.5, 0.25, 0.5),
-    vec3(-0.5, 0.5, 0.5),
-    vec3(-0.2, 0.5, 0.5),
-    vec3(-0.2, 0.25, 0.5),
-    vec3(-0.5, 0.25, -0.5),
-    vec3(-0.5, 0.5, -0.5),
-    vec3(-0.2, 0.5, -0.5),
-    vec3(-0.2, 0.25, -0.5),
-
-    vec3(0.2, 0.25, 0.5),
-    vec3(0.2, 0.5, 0.5),
-    vec3(0.5, 0.5, 0.5),
-    vec3(0.5, 0.25, 0.5),
-    vec3(0.2, 0.25, -0.5),
-    vec3(0.2, 0.5, -0.5),
-    vec3(0.5, 0.5, -0.5),
-    vec3(0.5, 0.25, -0.5)
+    vec3(-0.25, 0.1, 0.5), //16
+    vec3(0.25, 0.1, 0.5), //17
+    vec3(0.25, -0.1, 0.5), //18
+    vec3(-0.25, -0.1, 0.5), //19
+    vec3(-0.25, 0.1, -0.5), //20
+    vec3(0.25, 0.1, -0.5), //21
+    vec3(0.25, -0.1, -0.5), //22
+    vec3(-0.25, -0.1, -0.5), //23
 
 ]
 
-var verticesU = [
+var verticesA = [
 
-    vec3(-0.5, -0.5, 0.5),
-    vec3(-0.5, -0.25, 0.5),
-    vec3(0.5, -0.25, 0.5),
-    vec3(0.5, -0.5, 0.5),
-    vec3(-0.5, -0.5, -0.5),
-    vec3(-0.5, -0.25, -0.5),
-    vec3(0.5, -0.25, -0.5),
-    vec3(0.5, -0.5, -0.5),
+    vec3(-0.1, 0.5, 0.5), //0
+    vec3(0.1, 0.5, 0.5),  //1
+    vec3(-0.25, -0.5, 0.5), //2
+    vec3(-0.5, -0.5, 0.5), //3
+    vec3(-0.1, 0.5, -0.5), //4
+    vec3(0.1, 0.5, -0.5), //5
+    vec3(-0.25, -0.5, -0.5), //6
+    vec3(-0.5, -0.5, -0.5), //7
 
-    vec3(-0.2, -0.25, 0.5),
-    vec3(-0.2, -0.25, 0.5),
-    vec3(0.2, -0.25, 0.5),
-    vec3(0.2, -0.25, 0.5),
-    vec3(-0.2, -0.25, -0.5),
-    vec3(-0.2, -0.25, -0.5),
-    vec3(0.2, -0.25, -0.5),
-    vec3(0.2, -0.25, -0.5),
+    vec3(-0.1, 0.5, 0.5), //8
+    vec3(0.1, 0.5, 0.5), //9
+    vec3(0.5, -0.5, 0.5), //10
+    vec3(0.25, -0.5, 0.5), //11
+    vec3(-0.1, 0.5, -0.5), //12
+    vec3(0.1, 0.5, -0.5), //13
+    vec3(0.5, -0.5, -0.5), //14
+    vec3(0.25, -0.5, -0.5), //15
 
-    vec3(-0.5, -0.25, 0.5),
-    vec3(-0.5, 0.5, 0.5),
-    vec3(-0.2, 0.5, 0.5),
-    vec3(-0.2, -0.25, 0.5),
-    vec3(-0.5, -0.25, -0.5),
-    vec3(-0.5, 0.5, -0.5),
-    vec3(-0.2, 0.5, -0.5),
-    vec3(-0.2, -0.25, -0.5),
-
-    vec3(0.2, -0.25, 0.5),
-    vec3(0.2, 0.5, 0.5),
-    vec3(0.5, 0.5, 0.5),
-    vec3(0.5, -0.25, 0.5),
-    vec3(0.2, -0.25, -0.5),
-    vec3(0.2, 0.5, -0.5),
-    vec3(0.5, 0.5, -0.5),
-    vec3(0.5, -0.25, -0.5)
+    vec3(-0.25, 0.1, 0.5), //16
+    vec3(0.25, 0.1, 0.5), //17
+    vec3(0.25, -0.1, 0.5), //18
+    vec3(-0.25, -0.1, 0.5), //19
+    vec3(-0.25, 0.1, -0.5), //20
+    vec3(0.25, 0.1, -0.5), //21
+    vec3(0.25, -0.1, -0.5), //22
+    vec3(-0.25, -0.1, -0.5), //23
 
 ]
 
 var indices = [
     0, 1, 2, 3, 255,
-    3, 2, 6, 7, 255,
-    7, 6, 5, 4, 255,
-    4, 5, 1, 0, 255,
-    0, 4, 7, 3, 255,
+    3, 7, 6, 2, 255,
+    4, 5, 6, 7, 255,
+    0, 4, 5, 1, 255,
+    0, 3, 7, 4, 255,
     1, 5, 6, 2, 255,
 
     8, 9, 10, 11, 255,
@@ -175,12 +149,6 @@ var indices = [
     16, 20, 23, 19, 255,
     17, 21, 22, 18, 255,
 
-    24, 25, 26, 27, 255,
-    27, 26, 30, 31, 255,
-    31, 30, 29, 28, 255,
-    28, 29, 25, 24, 255,
-    24, 28, 31, 27, 255,
-    25, 29, 30, 26, 255
 ];
 
 init();
@@ -224,18 +192,18 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
 
     var vBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesI), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesH), gl.STATIC_DRAW);
 
-    var positionLoc = gl.getAttribLocation( program, "iPosition");
+    var positionLoc = gl.getAttribLocation( program, "hPosition");
     gl.vertexAttribPointer(positionLoc, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(positionLoc );
 
     var uBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, uBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesU), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesA), gl.STATIC_DRAW);
 
 
-    var positionLoc = gl.getAttribLocation(program, "uPosition");
+    var positionLoc = gl.getAttribLocation(program, "aPosition");
     gl.vertexAttribPointer(positionLoc, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(positionLoc);
     
@@ -245,17 +213,6 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
 
 
     //event listeners for buttons
-
-    document.getElementById("xButton").onclick = function () {
-        axis = xAxis;
-    };
-    document.getElementById("yButton").onclick = function () {
-        axis = yAxis;
-    };
-    document.getElementById("zButton").onclick = function () {
-        axis = zAxis;
-    };
-    document.getElementById("ButtonT").onclick = function () { flag = !flag; };
 
     document.getElementById("Morph").onclick = function () {
         morph = !morph;
