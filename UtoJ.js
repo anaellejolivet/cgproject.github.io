@@ -12,7 +12,7 @@
 var canvas;
 var gl;
 
-var numPositions  = 119;
+var numPositions  = 90;
 
 var positions = [];
 var colors = [];
@@ -73,8 +73,9 @@ var vertexColors = [
     vec4(0.0, 1.0, 1.0, 1.0)
 ];
 
-var verticesI = [
+var verticesU = [
 
+    //bottom
     vec3(-0.5, -0.5, 0.5),
     vec3(-0.5, -0.25, 0.5),
     vec3(0.5, -0.25, 0.5),
@@ -84,37 +85,31 @@ var verticesI = [
     vec3(0.5, -0.25, -0.5),
     vec3(0.5, -0.5, -0.5),
 
-    vec3(-0.2, -0.25, 0.5),
-    vec3(-0.2, 0.5, 0.5),
-    vec3(0.2, 0.5, 0.5),
-    vec3(0.2, -0.25, 0.5),
-    vec3(-0.2, -0.25, -0.5),
-    vec3(-0.2, 0.5, -0.5),
-    vec3(0.2, 0.5, -0.5),
-    vec3(0.2, -0.25, -0.5),
-
-    vec3(-0.5, 0.25, 0.5),
+    //left
+    vec3(-0.5, -0.25, 0.5),
     vec3(-0.5, 0.5, 0.5),
     vec3(-0.2, 0.5, 0.5),
-    vec3(-0.2, 0.25, 0.5),
-    vec3(-0.5, 0.25, -0.5),
+    vec3(-0.2, -0.25, 0.5),
+    vec3(-0.5, -0.25, -0.5),
     vec3(-0.5, 0.5, -0.5),
     vec3(-0.2, 0.5, -0.5),
-    vec3(-0.2, 0.25, -0.5),
+    vec3(-0.2, -0.25, -0.5),
 
-    vec3(0.2, 0.25, 0.5),
+    //right
+    vec3(0.2, -0.25, 0.5),
     vec3(0.2, 0.5, 0.5),
     vec3(0.5, 0.5, 0.5),
-    vec3(0.5, 0.25, 0.5),
-    vec3(0.2, 0.25, -0.5),
+    vec3(0.5, -0.25, 0.5),
+    vec3(0.2, -0.25, -0.5),
     vec3(0.2, 0.5, -0.5),
     vec3(0.5, 0.5, -0.5),
-    vec3(0.5, 0.25, -0.5)
+    vec3(0.5, -0.25, -0.5)
 
 ]
 
-var verticesU = [
+var verticesJ = [
 
+    //bottom
     vec3(-0.5, -0.5, 0.5),
     vec3(-0.5, -0.25, 0.5),
     vec3(0.5, -0.25, 0.5),
@@ -124,24 +119,17 @@ var verticesU = [
     vec3(0.5, -0.25, -0.5),
     vec3(0.5, -0.5, -0.5),
 
-    vec3(-0.2, -0.25, 0.5),
-    vec3(-0.2, -0.25, 0.5),
-    vec3(0.2, -0.25, 0.5),
-    vec3(0.2, -0.25, 0.5),
-    vec3(-0.2, -0.25, -0.5),
-    vec3(-0.2, -0.25, -0.5),
-    vec3(0.2, -0.25, -0.5),
-    vec3(0.2, -0.25, -0.5),
+    //top
+    vec3(-0.25, 0.25, 0.5),
+    vec3(-0.25, 0.5, 0.5),
+    vec3(0.5, 0.5, 0.5),
+    vec3(0.5, 0.25, 0.5),
+    vec3(-0.25, 0.25, -0.5),
+    vec3(-0.25, 0.5, -0.5),
+    vec3(0.5, 0.5, -0.5),
+    vec3(0.5, 0.25, -0.5),
 
-    vec3(-0.5, -0.25, 0.5),
-    vec3(-0.5, 0.5, 0.5),
-    vec3(-0.2, 0.5, 0.5),
-    vec3(-0.2, -0.25, 0.5),
-    vec3(-0.5, -0.25, -0.5),
-    vec3(-0.5, 0.5, -0.5),
-    vec3(-0.2, 0.5, -0.5),
-    vec3(-0.2, -0.25, -0.5),
-
+    //right
     vec3(0.2, -0.25, 0.5),
     vec3(0.2, 0.5, 0.5),
     vec3(0.5, 0.5, 0.5),
@@ -173,14 +161,7 @@ var indices = [
     23, 22, 21, 20, 255,
     20, 21, 17, 16, 255,
     16, 20, 23, 19, 255,
-    17, 21, 22, 18, 255,
-
-    24, 25, 26, 27, 255,
-    27, 26, 30, 31, 255,
-    31, 30, 29, 28, 255,
-    28, 29, 25, 24, 255,
-    24, 28, 31, 27, 255,
-    25, 29, 30, 26, 255
+    17, 21, 22, 18, 255
 ];
 
 init();
@@ -224,7 +205,7 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
 
     var vBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesI), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesU), gl.STATIC_DRAW);
 
     var positionLoc = gl.getAttribLocation( program, "iPosition");
     gl.vertexAttribPointer(positionLoc, 3, gl.FLOAT, false, 0, 0);
@@ -232,7 +213,7 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
 
     var uBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, uBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesU), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesJ), gl.STATIC_DRAW);
 
 
     var positionLoc = gl.getAttribLocation(program, "uPosition");
@@ -275,7 +256,7 @@ function render() {
 
 
     if (morph) {
-        Param += 0.015 * deltaT;
+        Param += 0.01 * deltaT;
         if (Param >= 1.0 || Param <= 0.0) {
             deltaT = -deltaT;
         }
