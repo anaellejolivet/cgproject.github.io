@@ -2,11 +2,11 @@
 
 /*
     Morphing between 2 word : "SALUT" and "AHOJ" 
-    S -> A (5 rect) Anezka
-    A -> H (3 rect) Anezka
-    L -> O (4 rect) Ana
-    U -> J (3 rect) Ana
-    T -> / (2 rect) Ana
+    S -> A (5 rect)
+    A -> H (3 rect)
+    L -> O (4 rect)
+    U -> J (3 rect)
+    T -> / (2 rect)
 */
 
 var canvas;
