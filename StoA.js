@@ -12,7 +12,7 @@
 var canvas;
 var gl;
 
-var numPositions  = 119;
+var numPositions  = 150;
 
 var positions = [];
 var colors = [];
@@ -48,6 +48,15 @@ var vertexColors = [
     vec4(0.0, 0.0, 1.0, 1.0), 
     vec4(0.0, 0.0, 1.0, 1.0), 
     vec4(0.0, 0.0, 1.0, 1.0), 
+    vec4(0.0, 0.0, 1.0, 1.0), 
+    vec4(0.0, 1.0, 1.0, 1.0),
+    vec4(0.0, 1.0, 1.0, 1.0),
+    vec4(0.0, 1.0, 1.0, 1.0),
+    vec4(0.0, 1.0, 1.0, 1.0),
+
+    vec4(0.0, 0.0, 1.0, 1.0),
+    vec4(0.0, 0.0, 1.0, 1.0), 
+    vec4(0.0, 0.0, 1.0, 1.0), 
     vec4(0.0, 0.0, 1.0, 1.0),  
     vec4(0.0, 1.0, 1.0, 1.0),
     vec4(0.0, 1.0, 1.0, 1.0),
@@ -57,7 +66,7 @@ var vertexColors = [
     vec4(0.0, 0.0, 1.0, 1.0), 
     vec4(0.0, 0.0, 1.0, 1.0), 
     vec4(0.0, 0.0, 1.0, 1.0), 
-    vec4(0.0, 0.0, 1.0, 1.0),  
+    vec4(0.0, 0.0, 1.0, 1.0), 
     vec4(0.0, 1.0, 1.0, 1.0),
     vec4(0.0, 1.0, 1.0, 1.0),
     vec4(0.0, 1.0, 1.0, 1.0),
@@ -66,90 +75,106 @@ var vertexColors = [
     vec4(0.0, 0.0, 1.0, 1.0), 
     vec4(0.0, 0.0, 1.0, 1.0), 
     vec4(0.0, 0.0, 1.0, 1.0), 
-    vec4(0.0, 0.0, 1.0, 1.0),  
+    vec4(0.0, 0.0, 1.0, 1.0), 
     vec4(0.0, 1.0, 1.0, 1.0),
     vec4(0.0, 1.0, 1.0, 1.0),
     vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0)
+    vec4(0.0, 1.0, 1.0, 1.0),
+
 ];
 
-var verticesI = [
+var verticesS = [
+    vec3(-0.5, 0.1, 0.5),
+    vec3( 0.5, 0.1, 0.5),
+    vec3( 0.5, -0.1, 0.5),
+    vec3(-0.5, -0.1, 0.5),
+    vec3(-0.5, 0.1, -0.5),
+    vec3( 0.5, 0.1, -0.5),
+    vec3( 0.5, -0.1, -0.5),
+    vec3(-0.5, -0.1, -0.5),
 
-    vec3(-0.5, -0.5, 0.5),
-    vec3(-0.5, -0.25, 0.5),
-    vec3(0.5, -0.25, 0.5),
+    vec3(0.25, 0.0, 0.5),
+    vec3(0.5, 0.0, 0.5),
     vec3(0.5, -0.5, 0.5),
-    vec3(-0.5, -0.5, -0.5),
-    vec3(-0.5, -0.25, -0.5),
-    vec3(0.5, -0.25, -0.5),
+    vec3(0.25, -0.5, 0.5),
+    vec3(0.25, 0.0, -0.5),
+    vec3(0.5, 0.0, -0.5),
     vec3(0.5, -0.5, -0.5),
+    vec3(0.25, -0.5, -0.5),
 
-    vec3(-0.2, -0.25, 0.5),
-    vec3(-0.2, 0.5, 0.5),
-    vec3(0.2, 0.5, 0.5),
-    vec3(0.2, -0.25, 0.5),
-    vec3(-0.2, -0.25, -0.5),
-    vec3(-0.2, 0.5, -0.5),
-    vec3(0.2, 0.5, -0.5),
-    vec3(0.2, -0.25, -0.5),
-
-    vec3(-0.5, 0.25, 0.5),
     vec3(-0.5, 0.5, 0.5),
-    vec3(-0.2, 0.5, 0.5),
-    vec3(-0.2, 0.25, 0.5),
-    vec3(-0.5, 0.25, -0.5),
-    vec3(-0.5, 0.5, -0.5),
-    vec3(-0.2, 0.5, -0.5),
-    vec3(-0.2, 0.25, -0.5),
-
-    vec3(0.2, 0.25, 0.5),
-    vec3(0.2, 0.5, 0.5),
     vec3(0.5, 0.5, 0.5),
     vec3(0.5, 0.25, 0.5),
-    vec3(0.2, 0.25, -0.5),
-    vec3(0.2, 0.5, -0.5),
+    vec3(-0.5, 0.25, 0.5),
+    vec3(-0.5, 0.5, -0.5),
     vec3(0.5, 0.5, -0.5),
-    vec3(0.5, 0.25, -0.5)
+    vec3(0.5, 0.25, -0.5),
+    vec3(-0.5, 0.25, -0.5),
 
-]
-
-var verticesU = [
+    vec3(-0.5, 0.5, 0.5),
+    vec3(-0.25, 0.5, 0.5),
+    vec3(-0.25, -0.1, 0.5),
+    vec3(-0.5, -0.1, 0.5),
+    vec3(-0.5, 0.5, -0.5),
+    vec3(-0.25, 0.5, -0.5),
+    vec3(-0.25, -0.1, -0.5),
+    vec3(-0.5, -0.1, -0.5),
 
     vec3(-0.5, -0.5, 0.5),
     vec3(-0.5, -0.25, 0.5),
-    vec3(0.5, -0.25, 0.5),
-    vec3(0.5, -0.5, 0.5),
+    vec3(0.45, -0.25, 0.5),
+    vec3(0.45, -0.5, 0.5),
     vec3(-0.5, -0.5, -0.5),
     vec3(-0.5, -0.25, -0.5),
-    vec3(0.5, -0.25, -0.5),
+    vec3(0.45, -0.25, -0.5),
+    vec3(0.45, -0.5, -0.5),
+]
+
+var verticesA = [
+    vec3(-0.15, 0.1, 0.5),
+    vec3(0.15, 0.1, 0.5),
+    vec3(0.15, -0.1, 0.5),
+    vec3(-0.15, -0.1, 0.5),
+    vec3(-0.15, 0.1, -0.5),
+    vec3(0.15, 0.1, -0.5),
+    vec3(0.15, -0.1, -0.5),
+    vec3(-0.15, -0.1, -0.5),
+
+    vec3(-0.1, 0.5, 0.5),
+    vec3(0.1, 0.5, 0.5),
+    vec3(0.5, -0.5, 0.5),
+    vec3(0.25, -0.5, 0.5),
+    vec3(-0.1, 0.5, -0.5),
+    vec3(0.1, 0.5, -0.5),
     vec3(0.5, -0.5, -0.5),
+    vec3(0.25, -0.5, -0.5),
 
-    vec3(-0.2, -0.25, 0.5),
-    vec3(-0.2, -0.25, 0.5),
-    vec3(0.2, -0.25, 0.5),
-    vec3(0.2, -0.25, 0.5),
-    vec3(-0.2, -0.25, -0.5),
-    vec3(-0.2, -0.25, -0.5),
-    vec3(0.2, -0.25, -0.5),
-    vec3(0.2, -0.25, -0.5),
+    vec3(-0.05, 0.5, 0.5),
+    vec3(0.05, 0.5, 0.5),
+    vec3(0.05, 0.3, 0.5),
+    vec3(-0.05, 0.3, 0.5),
+    vec3(-0.05, 0.5, -0.5), 
+    vec3(0.05, 0.5, -0.5),
+    vec3(0.05, 0.3, -0.5),
+    vec3(-0.05, 0.3, -0.5),
 
-    vec3(-0.5, -0.25, 0.5),
-    vec3(-0.5, 0.5, 0.5),
-    vec3(-0.2, 0.5, 0.5),
-    vec3(-0.2, -0.25, 0.5),
-    vec3(-0.5, -0.25, -0.5),
-    vec3(-0.5, 0.5, -0.5),
-    vec3(-0.2, 0.5, -0.5),
-    vec3(-0.2, -0.25, -0.5),
+    vec3(-0.1, 0.5, 0.5),
+    vec3(0.1, 0.5, 0.5),
+    vec3(-0.25, -0.5, 0.5),
+    vec3(-0.5, -0.5, 0.5),
+    vec3(-0.1, 0.5, -0.5),
+    vec3(0.1, 0.5, -0.5),
+    vec3(-0.25, -0.5, -0.5),
+    vec3(-0.5, -0.5, -0.5),
 
-    vec3(0.2, -0.25, 0.5),
-    vec3(0.2, 0.5, 0.5),
-    vec3(0.5, 0.5, 0.5),
-    vec3(0.5, -0.25, 0.5),
-    vec3(0.2, -0.25, -0.5),
-    vec3(0.2, 0.5, -0.5),
-    vec3(0.5, 0.5, -0.5),
-    vec3(0.5, -0.25, -0.5)
+    vec3( 0.3, -0.5, 0.5),
+    vec3(0.3, -0.3, 0.5),
+    vec3( 0.35, -0.3, 0.5),
+    vec3( 0.35, -0.5, 0.5),
+    vec3( 0.3, -0.5, -0.5),
+    vec3(0.3, -0.3, -0.5),
+    vec3( 0.35, -0.3, -0.5),
+    vec3( 0.35, -0.5, -0.5),
 
 ]
 
@@ -180,7 +205,14 @@ var indices = [
     31, 30, 29, 28, 255,
     28, 29, 25, 24, 255,
     24, 28, 31, 27, 255,
-    25, 29, 30, 26, 255
+    25, 29, 30, 26, 255,
+
+    32, 33, 34, 35, 255,
+    32, 36, 37, 33, 255,
+    33, 37, 38, 34, 255,
+    32, 35, 39, 36, 255,
+    34, 35, 39, 38, 255,
+    36, 37, 38, 39, 255
 ];
 
 init();
@@ -204,11 +236,11 @@ function init() {
 
     tParamLoc = gl.getUniformLocation( program, "tParam" );
 
-// array element buffer
+    // array element buffer
 
-var iBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBuffer);
-gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
+    var iBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBuffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
 
     // color array atrribute buffer
 
@@ -224,18 +256,18 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
 
     var vBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesI), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesA), gl.STATIC_DRAW);
 
-    var positionLoc = gl.getAttribLocation( program, "iPosition");
+    var positionLoc = gl.getAttribLocation( program, "aPosition");
     gl.vertexAttribPointer(positionLoc, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(positionLoc );
 
     var uBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, uBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesU), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesS), gl.STATIC_DRAW);
 
 
-    var positionLoc = gl.getAttribLocation(program, "uPosition");
+    var positionLoc = gl.getAttribLocation(program, "sPosition");
     gl.vertexAttribPointer(positionLoc, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(positionLoc);
     
@@ -245,17 +277,6 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
 
 
     //event listeners for buttons
-
-    document.getElementById("xButton").onclick = function () {
-        axis = xAxis;
-    };
-    document.getElementById("yButton").onclick = function () {
-        axis = yAxis;
-    };
-    document.getElementById("zButton").onclick = function () {
-        axis = zAxis;
-    };
-    document.getElementById("ButtonT").onclick = function () { flag = !flag; };
 
     document.getElementById("Morph").onclick = function () {
         morph = !morph;

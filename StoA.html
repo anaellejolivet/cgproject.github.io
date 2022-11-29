@@ -12,7 +12,7 @@
     <canvas id="gl-canvas" width="512" height="512">
         Oops ... your browser doesn't support the HTML5 canvas element
     </canvas>
-
+    
     <button id="Morph">Toggle Morph</button>
 
 
@@ -20,8 +20,8 @@
         #version 300 es
         
         //in  vec4 aPosition;
-        in  vec4 iPosition;
-        in  vec4 uPosition;
+        in  vec4 aPosition;
+        in  vec4 sPosition;
         in  vec4 aColor;
         out vec4 vColor;
         
@@ -56,8 +56,8 @@
                     float t = tParam;
         
             vColor = aColor;
-    gl_Position = rz * ry * rx * vec4(t*iPosition.x+(1.0-t)*uPosition.x, t*iPosition.y+(1.0-t)*uPosition.y, t*iPosition.z+(1.0-t)*uPosition.z, 1);
-    //gl_Position = rz * ry * rx * iPosition;
+            gl_Position = vec4(t*aPosition.x+(1.0-t)*sPosition.x, t*aPosition.y+(1.0-t)*sPosition.y, t*aPosition.z+(1.0-t)*sPosition.z, 1);
+    
         }
         </script>
 
