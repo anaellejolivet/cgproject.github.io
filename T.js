@@ -213,7 +213,7 @@ function render() {
     if (morph) {
         Param += 0.01 * deltaT;
         if (Param >= 1.0 || Param <= 0.0) {
-            deltaT = -deltaT;
+            deltaT = -deltaT;   
         }
     }
 
