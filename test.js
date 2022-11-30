@@ -278,33 +278,32 @@ var verticesH = [
 ]
 
 var verticesA2 = [
+    vec4(-0.1, 0.5, 0.5, 1.0),
+    vec4(0.1, 0.5, 0.5, 1.0),
+    vec4(-0.25, -0.5, 0.5, 1.0),
+    vec4(-0.5, -0.5, 0.5, 1.0),
+    vec4(-0.1, 0.5, -0.5, 1.0),
+    vec4(0.1, 0.5, -0.5, 1.0),
+    vec4(-0.25, -0.5, -0.5, 1.0),
+    vec4(-0.5, -0.5, -0.5, 1.0),
 
-    vec3(-0.1, 0.5, 0.5), //0
-    vec3(0.1, 0.5, 0.5),  //1
-    vec3(-0.25, -0.5, 0.5), //2
-    vec3(-0.5, -0.5, 0.5), //3
-    vec3(-0.1, 0.5, -0.5), //4
-    vec3(0.1, 0.5, -0.5), //5
-    vec3(-0.25, -0.5, -0.5), //6
-    vec3(-0.5, -0.5, -0.5), //7
+    vec4(-0.1, 0.5, 0.5, 1.0),
+    vec4(0.1, 0.5, 0.5, 1.0),
+    vec4(0.5, -0.5, 0.5, 1.0),
+    vec4(0.25, -0.5, 0.5, 1.0),
+    vec4(-0.1, 0.5, -0.5, 1.0),
+    vec4(0.1, 0.5, -0.5, 1.0),
+    vec4(0.5, -0.5, -0.5, 1.0),
+    vec4(0.25, -0.5, -0.5, 1.0),
 
-    vec3(-0.1, 0.5, 0.5), //8
-    vec3(0.1, 0.5, 0.5), //9
-    vec3(0.5, -0.5, 0.5), //10
-    vec3(0.25, -0.5, 0.5), //11
-    vec3(-0.1, 0.5, -0.5), //12
-    vec3(0.1, 0.5, -0.5), //13
-    vec3(0.5, -0.5, -0.5), //14
-    vec3(0.25, -0.5, -0.5), //15
-
-    vec3(-0.25, 0.1, 0.5), //16
-    vec3(0.25, 0.1, 0.5), //17
-    vec3(0.25, -0.1, 0.5), //18
-    vec3(-0.25, -0.1, 0.5), //19
-    vec3(-0.25, 0.1, -0.5), //20
-    vec3(0.25, 0.1, -0.5), //21
-    vec3(0.25, -0.1, -0.5), //22
-    vec3(-0.25, -0.1, -0.5), //23
+    vec4(-0.25, 0.1, 0.5, 1.0),
+    vec4(0.25, 0.1, 0.5, 1.0),
+    vec4(0.25, -0.1, 0.5, 1.0),
+    vec4(-0.25, -0.1, 0.5, 1.0),
+    vec4(-0.25, 0.1, -0.5, 1.0),
+    vec4(0.25, 0.1, -0.5, 1.0),
+    vec4(0.25, -0.1, -0.5, 1.0),
+    vec4(-0.25, -0.1, -0.5, 1.0),
 
 ]
 
@@ -428,7 +427,7 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indicesHA), gl.STATIC_DRAW
     modelViewMatrix = mult(modelViewMatrix,Tx);
     modelViewMatrix = mult(modelViewMatrix,S);
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer2);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesH), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesA2), gl.STATIC_DRAW);
     positionLoc = gl.getAttribLocation(program, "aPosition");
     gl.vertexAttribPointer(positionLoc, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(positionLoc);
