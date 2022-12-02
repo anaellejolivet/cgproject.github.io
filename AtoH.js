@@ -35,6 +35,7 @@ var tParamLoc;
 
 var deltaT = 1.0;
 
+
 var vertexColors = [
     vec4(0.0, 0.0, 1.0, 1.0), 
     vec4(0.0, 0.0, 1.0, 1.0), 
