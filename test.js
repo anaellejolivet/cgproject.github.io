@@ -373,6 +373,8 @@ function init() {
     program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(program);
 
+    tParamLoc = gl.getUniformLocation( program, "tParam" );
+
     // assign color buffer and vertex buffer for color cube
     cBuffer1 = gl.createBuffer();
     vBuffer1 = gl.createBuffer();
@@ -406,6 +408,15 @@ function render(){
     eye = vec3(radius*Math.sin(theta)*Math.cos(phi),
         radius*Math.sin(theta)*Math.sin(phi), radius*Math.cos(theta));
 
+        if (morph) {
+        Param += 0.015 * deltaT;
+        if (Param >= 1.0 || Param <= 0.0) {
+            deltaT = -deltaT;
+        }
+        console.log(Param);
+    }
+
+    gl.uniform1f(tParamLoc, Param);
         // array element buffer
 
 var iBuffer = gl.createBuffer();
@@ -489,15 +500,6 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indicesHA), gl.STATIC_DRAW
 
     gl.drawElements(gl.TRIANGLE_FAN, numPosTetra, gl.UNSIGNED_BYTE, 0);
 
-    if (morph) {
-        Param += 0.015 * deltaT;
-        if (Param >= 1.0 || Param <= 0.0) {
-            deltaT = -deltaT;
-        }
-        console.log(Param);
-    }
-
-    gl.uniform1f(tParamLoc, Param);
 
     requestAnimationFrame(render);
 }
