@@ -3,6 +3,24 @@
 var canvas;
 var gl;
 
+var xAxis = 0;
+var yAxis = 1;
+var zAxis = 2;
+
+var axis = 0;
+var theta = [0, 0, 0];
+
+var thetaLoc;
+
+var flag = false;
+
+var morph = true;
+
+var Param = 0.0;
+var tParamLoc;
+
+var deltaT = 1.0;
+
 var near = 0.3;
 var far = 3.75;
 var radius = 4.0;
@@ -25,6 +43,8 @@ var cBuffer2;
 
 var vBuffer1;
 var vBuffer2;
+var vBuffer3;
+var vBuffer4;
 
 
 var positionLoc;
@@ -356,13 +376,26 @@ function init() {
     // assign color buffer and vertex buffer for color cube
     cBuffer1 = gl.createBuffer();
     vBuffer1 = gl.createBuffer();
+    vBuffer2 = gl.createBuffer();
 
     // assign color buffer and vertex buffer for color tetrahderon
     cBuffer2 = gl.createBuffer();
-    vBuffer2 = gl.createBuffer();
+    vBuffer3 = gl.createBuffer();
+    vBuffer4 = gl.createBuffer();
 
     modelViewMatrixLoc = gl.getUniformLocation(program, "uModelViewMatrix");
     projectionMatrixLoc = gl.getUniformLocation(program, "uProjectionMatrix");
+
+    thetaLoc = gl.getUniformLocation(program, "uTheta");
+
+
+    //event listeners for buttons
+
+    document.getElementById("Morph").onclick = function () {
+        morph = !morph;
+        console.log(morph);
+    };
+
 
     render();
 }
@@ -396,11 +429,21 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indicesSA), gl.STATIC_DRAW
     modelViewMatrix = lookAt(eye, at , up);
     modelViewMatrix = mult(modelViewMatrix,Tx);
     modelViewMatrix = mult(modelViewMatrix,S);
+
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer1);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesS), gl.STATIC_DRAW);
+
     positionLoc = gl.getAttribLocation(program, "aPosition");
     gl.vertexAttribPointer(positionLoc, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(positionLoc);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer2);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesA), gl.STATIC_DRAW);
+
+    positionLoc = gl.getAttribLocation(program, "bPosition");
+    gl.vertexAttribPointer(positionLoc, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(positionLoc);
+
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
     gl.drawElements(gl.TRIANGLE_FAN, numPosCube, gl.UNSIGNED_BYTE, 0);
@@ -426,13 +469,35 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indicesHA), gl.STATIC_DRAW
     modelViewMatrix = lookAt(eye, at , up);
     modelViewMatrix = mult(modelViewMatrix,Tx);
     modelViewMatrix = mult(modelViewMatrix,S);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer2);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer3);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesA2), gl.STATIC_DRAW);
+
     positionLoc = gl.getAttribLocation(program, "aPosition");
     gl.vertexAttribPointer(positionLoc, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(positionLoc);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer4);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(verticesH), gl.STATIC_DRAW);
+
+    positionLoc = gl.getAttribLocation(program, "bPosition");
+    gl.vertexAttribPointer(positionLoc, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(positionLoc);
+
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
 
     gl.drawElements(gl.TRIANGLE_FAN, numPosTetra, gl.UNSIGNED_BYTE, 0);
+
+    if (morph) {
+        Param += 0.015 * deltaT;
+        if (Param >= 1.0 || Param <= 0.0) {
+            deltaT = -deltaT;
+        }
+        console.log(Param);
+    }
+
+    gl.uniform1f(tParamLoc, Param);
+
+    requestAnimationFrame(render);
 }
