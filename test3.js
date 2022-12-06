@@ -19,10 +19,10 @@ var morph = true;
 var Param = 0.0;
 var tParamLoc;
 
-var deltaT = 0.8;
-var viewerPos;
+var deltaT = 1.0;
+
 var near = 0.3;
-var far = 3.75;
+var far = 4;
 var radius = 4.0;
 var theta = 0.26;
 var phi = 2.3;
@@ -57,99 +57,91 @@ var vBuffer10;
 var positionLoc;
 var program;
 
-/**************************************************************
- * light
- * *************************************************************/
-var lightPosition = vec4(1.0, 0.0, 0.0, .0);
-var lightAmbient = vec4(1.0, 0.8, 0.8, 1.0);
-var lightDiffuse = vec4(0.0, 1.0, 1.0, 1.0);
-var lightSpecular = vec4(0.0, 0.0, 1.0, 1.0);
-
-var materialAmbient  = vec4(0.0 , 1.0 , 1.0 , 1.0);
-var materialDiffuse  = vec4(0.1 , 0.1 , 0.01 , 1.0);
-var materialSpecular = vec4(0.5 , 0.5 , 0.5, 1.0);
-var materialShininess = 36.0;
-
 /****************************************************************
  * S to A
  * ****************************************************************/
 
- var numPosSA = 150;
+var numPosSA = 150;
 
- var vertexColorsSA = [
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
- 
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
- 
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
- 
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
- 
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 1.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
-   vec4(0.0, 0.0, 1.0, 1.0),
- ];
+var vertexColorsSA = [
+  //middle
+  vec4(0.7, 0.3, 1.0, 1.0),
+  vec4(0.6, 0.4, 1.0, 1.0),
+  vec4(0.5, 0.5, 1.0, 1.0),
+  vec4(0.5, 0.5, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+
+  //right
+  vec4(0.8, 0.2, 1.0, 1.0),
+  vec4(0.8, 0.2, 1.0, 1.0),
+  vec4(0.2, 1.0, 1.0, 1.0),
+  vec4(0.2, 1.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+
+  //top
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(0.5, 0.5, 1.0, 1.0),
+  vec4(0.5, 0.5, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+
+  //left
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(0.5, 0.5, 1.0, 1.0),
+  vec4(0.5, 0.5, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+
+  //down
+  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(0.3, 0.7, 1.0, 1.0),
+  vec4(0.3, 0.7, 1.0, 1.0),
+  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+];
 
 var verticesS = [
-  vec4(-0.5, 0.1, 0.5, 1.0),
-  vec4(0.5, 0.1, 0.5, 1.0),
-  vec4(0.5, -0.1, 0.5, 1.0),
-  vec4(-0.5, -0.1, 0.5, 1.0),
-  vec4(-0.5, 0.1, -0.5, 1.0),
-  vec4(0.5, 0.1, -0.5, 1.0),
-  vec4(0.5, -0.1, -0.5, 1.0),
-  vec4(-0.5, -0.1, -0.5, 1.0),
+  vec4(-0.25, 0.1, 0.5, 1.0),
+  vec4(0.25, 0.1, 0.5, 1.0),
+  vec4(0.25, -0.1, 0.5, 1.0),
+  vec4(-0.25, -0.1, 0.5, 1.0),
+  vec4(-0.25, 0.1, -0.5, 1.0),
+  vec4(0.25, 0.1, -0.5, 1.0),
+  vec4(0.25, -0.1, -0.5, 1.0),
+  vec4(-0.25, -0.1, -0.5, 1.0),
 
-  vec4(0.25, 0.0, 0.5, 1.0),
-  vec4(0.5, 0.0, 0.5, 1.0),
+  vec4(0.25, 0.1, 0.5, 1.0),
+  vec4(0.5, 0.1, 0.5, 1.0),
   vec4(0.5, -0.5, 0.5, 1.0),
   vec4(0.25, -0.5, 0.5, 1.0),
-  vec4(0.25, 0.0, -0.5, 1.0),
-  vec4(0.5, 0.0, -0.5, 1.0),
+  vec4(0.25, 0.1, -0.5, 1.0),
+  vec4(0.5, 0.1, -0.5, 1.0),
   vec4(0.5, -0.5, -0.5, 1.0),
   vec4(0.25, -0.5, -0.5, 1.0),
 
-  vec4(-0.5, 0.5, 0.5, 1.0),
+  vec4(-0.25, 0.5, 0.5, 1.0),
   vec4(0.5, 0.5, 0.5, 1.0),
   vec4(0.5, 0.25, 0.5, 1.0),
-  vec4(-0.5, 0.25, 0.5, 1.0),
-  vec4(-0.5, 0.5, -0.5, 1.0),
+  vec4(-0.25, 0.25, 0.5, 1.0),
+  vec4(-0.25, 0.5, -0.5, 1.0),
   vec4(0.5, 0.5, -0.5, 1.0),
   vec4(0.5, 0.25, -0.5, 1.0),
-  vec4(-0.5, 0.25, -0.5, 1.0),
+  vec4(-0.25, 0.25, -0.5, 1.0),
 
   vec4(-0.5, 0.5, 0.5, 1.0),
   vec4(-0.25, 0.5, 0.5, 1.0),
@@ -241,17 +233,8 @@ var indicesSA = [
 var numPosAH = 85;
 
 var vertexColorsAH = [
-  vec4(0.0, 1.0, 1.0, 1.0),
-  vec4(0.0, 1.0, 1.0, 1.0),
-  vec4(0.0, 1.0, 1.0, 1.0),
-  vec4(0.0, 1.0, 1.0, 1.0),
-  vec4(0.0, 0.0, 1.0, 1.0),
-  vec4(0.0, 0.0, 1.0, 1.0),
-  vec4(0.0, 0.0, 1.0, 1.0),
-  vec4(0.0, 0.0, 1.0, 1.0),
-
-  vec4(0.0, 1.0, 1.0, 1.0),
-  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(1.0, 0.0, 1.0, 1.0),
   vec4(0.0, 1.0, 1.0, 1.0),
   vec4(0.0, 1.0, 1.0, 1.0),
   vec4(0.0, 0.0, 1.0, 1.0),
@@ -259,10 +242,19 @@ var vertexColorsAH = [
   vec4(0.0, 0.0, 1.0, 1.0),
   vec4(0.0, 0.0, 1.0, 1.0),
 
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(1.0, 0.0, 1.0, 1.0),
   vec4(0.0, 1.0, 1.0, 1.0),
   vec4(0.0, 1.0, 1.0, 1.0),
-  vec4(0.0, 1.0, 1.0, 1.0),
-  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+
+  vec4(0.5, 0.5, 1.0, 1.0),
+  vec4(0.5, 0.5, 1.0, 1.0),
+  vec4(0.5, 0.5, 1.0, 1.0),
+  vec4(0.5, 0.5, 1.0, 1.0),
   vec4(0.0, 0.0, 1.0, 1.0),
   vec4(0.0, 0.0, 1.0, 1.0),
   vec4(0.0, 0.0, 1.0, 1.0),
@@ -344,42 +336,41 @@ var indicesAH = [
 var numPosLO = 119;
 
 var vertexColorsLO = [
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-  
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-  
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-  
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
 
+  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+
+  vec4(0.8, 0.2, 1.0, 1.0),
+  vec4(1.0, 0.2, 1.0, 1.0),
+  vec4(1.0, 0.2, 1.0, 1.0),
+  vec4(0.8, 0.2, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+
+  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
 ];
 
 var verticesL = [
@@ -483,32 +474,33 @@ var indicesLO = [
 var numPosUJ = 90;
 
 var vertexColorsUJ = [
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-  
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-  
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.5, 0.5, 1.0, 1.0),
+  vec4(0.5, 0.5, 1.0, 1.0),
+  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+
+  vec4(0.5, 0.5, 1.0, 1.0),
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(0.5, 0.5, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+
+  vec4(0.1, 0.9, 1.0, 1.0),
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(0.1, 0.9, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+
   
 ];
 
@@ -524,14 +516,14 @@ var verticesU = [
   vec4(0.5, -0.5, -0.5, 1.0),
 
   //left
-  vec4(-0.5, -0.5, 0.5, 1.0),
+  vec4(-0.5, -0.3, 0.5, 1.0),
   vec4(-0.5, 0.5, 0.5, 1.0),
   vec4(-0.2, 0.5, 0.5, 1.0),
-  vec4(-0.2, -0.5, 0.5, 1.0),
-  vec4(-0.5, -0.5, -0.5, 1.0),
+  vec4(-0.2, -0.3, 0.5, 1.0),
+  vec4(-0.5, -0.3, -0.5, 1.0),
   vec4(-0.5, 0.5, -0.5, 1.0),
   vec4(-0.2, 0.5, -0.5, 1.0),
-  vec4(-0.2, -0.5, -0.5, 1.0),
+  vec4(-0.2, -0.3, -0.5, 1.0),
 
   //right
   vec4(0.2, -0.25, 0.5, 1.0),
@@ -558,12 +550,12 @@ var verticesJ = [
   //top
   vec4(-0.25, 0.25, 0.5, 1.0),
   vec4(-0.25, 0.5, 0.5, 1.0),
-  vec4(0.5, 0.5, 0.5, 1.0),
-  vec4(0.5, 0.25, 0.5, 1.0),
+  vec4(0.25, 0.5, 0.5, 1.0),
+  vec4(0.25, 0.25, 0.5, 1.0),
   vec4(-0.25, 0.25, -0.5, 1.0),
   vec4(-0.25, 0.5, -0.5, 1.0),
-  vec4(0.5, 0.5, -0.5, 1.0),
-  vec4(0.5, 0.25, -0.5, 1.0),
+  vec4(0.25, 0.5, -0.5, 1.0),
+  vec4(0.25, 0.25, -0.5, 1.0),
 
   //right
   vec4(0.2, -0.25, 0.5, 1.0),
@@ -594,23 +586,23 @@ var indicesUJ = [
 var numPosT = 60;
 
 var vertexColorsT = [
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-  
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(0.8, 0.2, 1.0, 1.0),
+  vec4(0.8, 0.2, 1.0, 1.0),
+  vec4(1.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+
+  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(0.8, 0.2, 1.0, 1.0),
+  vec4(0.8, 0.2, 1.0, 1.0),
+  vec4(0.0, 1.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
+  vec4(0.0, 0.0, 1.0, 1.0),
 ];
 
 var verticesT = [
@@ -637,24 +629,24 @@ var verticesT = [
 
 var vertices = [
   //top
-  vec4(-0.5, 0.15, 0.5, 1.0),
-  vec4(-0.5, 0.15, 0.5, 1.0),
-  vec4(0.5, 0.15, 0.5, 1.0),
-  vec4(0.5, 0.15, 0.5, 1.0),
-  vec4(-0.5, 0.15, -0.5, 1.0),
-  vec4(-0.5, 0.15, -0.5, 1.0),
-  vec4(0.5, 0.15, -0.5, 1.0),
-  vec4(0.5, 0.15, -0.5, 1.0),
+  vec4(-0.5, 0.25, 0.5, 1.0),
+  vec4(-0.5, 0.25, 0.5, 1.0),
+  vec4(0.5, 0.25, 0.5, 1.0),
+  vec4(0.5, 0.25, 0.5, 1.0),
+  vec4(-0.5, 0.25, -0.5, 1.0),
+  vec4(-0.5, 0.25, -0.5, 1.0),
+  vec4(0.5, 0.25, -0.5, 1.0),
+  vec4(0.5, 0.25, -0.5, 1.0),
 
   //middle
-  vec4(-0.2, 0.15, 0.5, 1.0),
-  vec4(-0.2, 0.15, 0.5, 1.0),
-  vec4(0.2, 0.15, 0.5, 1.0),
-  vec4(0.2, 0.15, 0.5, 1.0),
-  vec4(-0.2, 0.15, -0.5, 1.0),
-  vec4(-0.2, 0.15, -0.5, 1.0),
-  vec4(0.2, 0.15, -0.5, 1.0),
-  vec4(0.2, 0.15, -0.5, 1.0),
+  vec4(-0.2, 0.25, 0.5, 1.0),
+  vec4(-0.2, 0.25, 0.5, 1.0),
+  vec4(0.2, 0.25, 0.5, 1.0),
+  vec4(0.2, 0.25, 0.5, 1.0),
+  vec4(-0.2, 0.25, -0.5, 1.0),
+  vec4(-0.2, 0.25, -0.5, 1.0),
+  vec4(0.2, 0.25, -0.5, 1.0),
+  vec4(0.2, 0.25, -0.5, 1.0),
 ];
 
 var indicesT = [
@@ -772,7 +764,7 @@ function render() {
 
   // ==== bind and send vertex info for cube to vertex shader ====
   projectionMatrix = perspective(fovy, aspect, near, far);
-  var S = scale(0.4, 0.4, 1);
+  var S = scale(0.5, 0.5, 1);
   var Tx = translate(-1.2, 0, 0);
   modelViewMatrix = lookAt(eye, at, up);
   modelViewMatrix = mult(modelViewMatrix, Tx);
@@ -818,8 +810,8 @@ function render() {
   gl.vertexAttribPointer(colorLoc, 4, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(colorLoc);
   // ==== bind and send vertex info for tretrahedron to vertex shader ====
-  var S = scale(0.4, 0.4, 1);
-  var Tx = translate(-0.7, 0, 0);
+  var S = scale(0.5, 0.5, 1);
+  var Tx = translate(-0.6, 0, 0);
   modelViewMatrix = lookAt(eye, at, up);
   modelViewMatrix = mult(modelViewMatrix, Tx);
   modelViewMatrix = mult(modelViewMatrix, S);
@@ -866,8 +858,8 @@ function render() {
  
    // ==== bind and send vertex info for cube to vertex shader ====
    projectionMatrix = perspective(fovy, aspect, near, far);
-   var S = scale(0.4, 0.4, 1);   
-   var Tx = translate(-0.2, 0, 0);
+   var S = scale(0.5, 0.5, 1);   
+   var Tx = translate(0, 0, 0);
    modelViewMatrix = lookAt(eye, at, up);
    modelViewMatrix = mult(modelViewMatrix, Tx);
    modelViewMatrix = mult(modelViewMatrix, S);
@@ -889,8 +881,6 @@ function render() {
    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
    gl.drawElements(gl.TRIANGLE_FAN, numPosLO, gl.UNSIGNED_BYTE, 0);
-
-   
 
   /****************************************************************
  * U to J
@@ -915,8 +905,8 @@ function render() {
  
    // ==== bind and send vertex info for cube to vertex shader ====
    projectionMatrix = perspective(fovy, aspect, near, far);
-   var S = scale(0.4, 0.4, 1);
-   var Tx = translate(0.3, 0, 0);
+   var S = scale(0.5, 0.5, 1);
+   var Tx = translate(0.6, 0, 0);
    modelViewMatrix = lookAt(eye, at, up);
    modelViewMatrix = mult(modelViewMatrix, Tx);
    modelViewMatrix = mult(modelViewMatrix, S);
@@ -950,34 +940,7 @@ function render() {
      new Uint8Array(indicesT),
      gl.STATIC_DRAW
    );
-    
-   viewerPos = vec3(0.0, 0.0, -20.0);
-
-    projectionMatrix = ortho(-1, 1, -1, 1, -100, 100);
-
-    var ambientProduct = mult(lightAmbient, materialAmbient);
-    var diffuseProduct = mult(lightDiffuse, materialDiffuse);
-    var specularProduct = mult(lightSpecular, materialSpecular);
-
-    var normalLoc = gl.getAttribLocation(program, "aNormal");
-    gl.vertexAttribPointer(normalLoc, 3, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(normalLoc);
-
-    gl.uniform4fv(gl.getUniformLocation(program, "uAmbientProduct"),
-       ambientProduct);
-    gl.uniform4fv(gl.getUniformLocation(program, "uDiffuseProduct"),
-       diffuseProduct );
-    gl.uniform4fv(gl.getUniformLocation(program, "uSpecularProduct"),
-       specularProduct );
-    gl.uniform4fv(gl.getUniformLocation(program, "uLightPosition"),
-       lightPosition );
-
-    gl.uniform1f(gl.getUniformLocation(program,
-       "uShininess"), materialShininess);
-
-    gl.uniformMatrix4fv( gl.getUniformLocation(program, "uProjectionMatrix"),
-       false, flatten(projectionMatrix));
-       
+ 
    // ==== color buffer for cube ====
    var cBuffer = gl.createBuffer();
    gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
@@ -989,8 +952,8 @@ function render() {
  
    // ==== bind and send vertex info for cube to vertex shader ====
    projectionMatrix = perspective(fovy, aspect, near, far);
-   var S = scale(0.4, 0.4, 1);
-   var Tx = translate(0.8, 0, 0);
+   var S = scale(0.5, 0.5, 1);
+   var Tx = translate(1.2, 0, 0);
    modelViewMatrix = lookAt(eye, at, up);
    modelViewMatrix = mult(modelViewMatrix, Tx);
    modelViewMatrix = mult(modelViewMatrix, S);
@@ -1012,33 +975,6 @@ function render() {
    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
    gl.drawElements(gl.TRIANGLE_FAN, numPosT, gl.UNSIGNED_BYTE, 0);
-
-   /*viewerPos = vec3(0.0, 0.0, -20.0);
-
-    projectionMatrix = ortho(-1, 1, -1, 1, -100, 100);
-
-    var ambientProduct = mult(lightAmbient, materialAmbient);
-    var diffuseProduct = mult(lightDiffuse, materialDiffuse);
-    var specularProduct = mult(lightSpecular, materialSpecular);
-
-    var normalLoc = gl.getAttribLocation(program, "aNormal");
-    gl.vertexAttribPointer(normalLoc, 3, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(normalLoc);
-
-    gl.uniform4fv(gl.getUniformLocation(program, "uAmbientProduct"),
-       ambientProduct);
-    gl.uniform4fv(gl.getUniformLocation(program, "uDiffuseProduct"),
-       diffuseProduct );
-    gl.uniform4fv(gl.getUniformLocation(program, "uSpecularProduct"),
-       specularProduct );
-    gl.uniform4fv(gl.getUniformLocation(program, "uLightPosition"),
-       lightPosition );
-
-    gl.uniform1f(gl.getUniformLocation(program,
-       "uShininess"), materialShininess);
-
-    gl.uniformMatrix4fv( gl.getUniformLocation(program, "uProjectionMatrix"),
-       false, flatten(projectionMatrix));*/
 
   requestAnimationFrame(render);
 }
