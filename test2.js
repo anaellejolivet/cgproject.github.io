@@ -817,6 +817,7 @@ function render() {
   var colorLoc = gl.getAttribLocation(program, "aColor");
   gl.vertexAttribPointer(colorLoc, 4, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(colorLoc);
+  
   // ==== bind and send vertex info for tretrahedron to vertex shader ====
   var S = scale(0.4, 0.4, 1);
   var Tx = translate(-0.7, 0, 0);
