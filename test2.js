@@ -61,12 +61,12 @@ var program;
  * light
  * *************************************************************/
 var lightPosition = vec4(1.0, 0.0, 0.0, .0);
-var lightAmbient = vec4(1.0, 0.8, 0.8, 1.0);
-var lightDiffuse = vec4(0.0, 1.0, 1.0, 1.0);
+var lightAmbient = vec4(0.0, 0.8, 0.8, 1.0);
+var lightDiffuse = vec4(1.0, 1.0, 0.0, 1.0);
 var lightSpecular = vec4(0.0, 0.0, 1.0, 1.0);
 
 var materialAmbient  = vec4(0.0 , 1.0 , 1.0 , 1.0);
-var materialDiffuse  = vec4(0.1 , 0.1 , 0.01 , 1.0);
+var materialDiffuse  = vec4(0.0 , 0.1 , 0.3 , 1.0);
 var materialSpecular = vec4(0.5 , 0.5 , 0.5, 1.0);
 var materialShininess = 36.0;
 
@@ -951,32 +951,6 @@ function render() {
      gl.STATIC_DRAW
    );
     
-   viewerPos = vec3(0.0, 0.0, -20.0);
-
-    projectionMatrix = ortho(-1, 1, -1, 1, -100, 100);
-
-    var ambientProduct = mult(lightAmbient, materialAmbient);
-    var diffuseProduct = mult(lightDiffuse, materialDiffuse);
-    var specularProduct = mult(lightSpecular, materialSpecular);
-
-    var normalLoc = gl.getAttribLocation(program, "aNormal");
-    gl.vertexAttribPointer(normalLoc, 3, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(normalLoc);
-
-    gl.uniform4fv(gl.getUniformLocation(program, "uAmbientProduct"),
-       ambientProduct);
-    gl.uniform4fv(gl.getUniformLocation(program, "uDiffuseProduct"),
-       diffuseProduct );
-    gl.uniform4fv(gl.getUniformLocation(program, "uSpecularProduct"),
-       specularProduct );
-    gl.uniform4fv(gl.getUniformLocation(program, "uLightPosition"),
-       lightPosition );
-
-    gl.uniform1f(gl.getUniformLocation(program,
-       "uShininess"), materialShininess);
-
-    gl.uniformMatrix4fv( gl.getUniformLocation(program, "uProjectionMatrix"),
-       false, flatten(projectionMatrix));
        
    // ==== color buffer for cube ====
    var cBuffer = gl.createBuffer();
@@ -1013,7 +987,7 @@ function render() {
    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
    gl.drawElements(gl.TRIANGLE_FAN, numPosT, gl.UNSIGNED_BYTE, 0);
 
-   /*viewerPos = vec3(0.0, 0.0, -20.0);
+   viewerPos = vec3(0.0, 0.0, -20.0);
 
     projectionMatrix = ortho(-1, 1, -1, 1, -100, 100);
 
@@ -1038,7 +1012,7 @@ function render() {
        "uShininess"), materialShininess);
 
     gl.uniformMatrix4fv( gl.getUniformLocation(program, "uProjectionMatrix"),
-       false, flatten(projectionMatrix));*/
+       false, flatten(projectionMatrix));
 
   requestAnimationFrame(render);
 }
