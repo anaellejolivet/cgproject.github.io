@@ -1,5 +1,11 @@
 "use strict";
 
+/*We started with following codes:
+    Homework 4 for 3D morphing
+    Lab 14 for putting more objects on the scene
+    Lab 15 for shading*/
+
+    
 var canvas;
 var gl;
 
@@ -65,10 +71,11 @@ var lightAmbient = vec4(0.0, 0.8, 0.8, 1.0);
 var lightDiffuse = vec4(1.0, 1.0, 0.0, 1.0);
 var lightSpecular = vec4(0.0, 0.0, 1.0, 1.0);
 
-var materialAmbient  = vec4(0.0 , 1.0 , 1.0 , 1.0);
-var materialDiffuse  = vec4(0.0 , 0.1 , 0.3 , 1.0);
-var materialSpecular = vec4(0.5 , 0.5 , 0.5, 1.0);
-var materialShininess = 36.0;
+// We chose copper color from Lab 15 
+var materialAmbient  = vec4(0.19125 , 0.0735 , 0.0225 , 1.0);
+var materialDiffuse  = vec4(0.7038 , 0.27048 , 0.0828 , 1.0);
+var materialSpecular  = vec4(0.256777 , 0.137622 , 0.086014 , 1.0);
+var materialShininess = 76.8;
 
 /****************************************************************
  * S to A
